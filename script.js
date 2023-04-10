@@ -10,38 +10,38 @@ const gifs = [
     `<img data-test="face-up-image" src="img/unicornparrot.gif">`
 ];
 
-let counter = 0;
+let contar = 0;
 
-let selectedStatus = false;
+let selecaoStatus = false;
 
-let chosenCard = null;
+let cartaoEscolhido = null;
 
-let equalCard = [];
+let cartaoIgual = [];
 
-let amountCards = null;
+let quantidadeCartas = null;
 
-let amountPairs = null;
+let quantidadePares = null;
 
-function startGame() {
+function comecarGame() {
 
-    let amountCards = parseInt(prompt(`Com quantas cartas deseja jogar?
-Obs: Digite um número par entre 4 e 14!`));
+    let quantidadeCartas = parseInt(prompt(`Quantas cartas deseja jogar?
+Escolha um número par entre 4 e 14!`));
 
-    while ((amountCards % 2 !== 0) || (amountCards < 4) || (amountCards > 14)) {
-        amountCards = parseInt(prompt(`Atenção!!
+    while ((quantidadeCartas % 2 !== 0) || (quantidadeCartas < 4) || (quantidadeCartas > 14)) {
+        quantidadeCartas = parseInt(prompt(`Atenção!!
 Digite um número par entre 4 e 14!`));
     };
 
     gifs.sort(randomCards);
 
-    for (let i = 0; i < (amountCards / 2); i++) {
+    for (let i = 0; i < (quantidadeCartas / 2); i++) {
         cards.push(gifs[i], gifs[i]);
     };
 
-    amountPairs = amountCards / 2;
+    quantidadePares = quantidadeCartas / 2;
     cards.sort(randomCards);
 
-    for (let i = 0; i < amountCards; i++) {
+    for (let i = 0; i < quantidadeCartas; i++) {
         const box = document.querySelector('.box-cards');
         box.innerHTML += `
         <div data-test="card" class="card" onclick="clickCard(this)" id="${i}">
@@ -59,35 +59,35 @@ function randomCards() {
     return Math.random() - 0.5;
 };
 
-startGame()
+comecarGame()
 
 function clickCard(card) {
     const backFace = card.querySelector('.back-face');
     card.removeAttribute('onclick');
 
-    if (counter == 0) {
+    if (contar == 0) {
         time = setInterval(timeCounter, 1000);
     };
 
     if (backFace.classList.contains('.selected-back') === false) {
         spinCard(card);
-        counter++;
-        if (selectedStatus === false) {
-            chosenCard = card;
-            selectedStatus = true;
-        } else if (chosenCard.innerHTML !== card.innerHTML) {
-            selectedStatus = false;
+        contar++;
+        if (selecaoStatus === false) {
+            cartaoEscolhido = card;
+            selecaoStatus = true;
+        } else if (cartaoEscolhido.innerHTML !== card.innerHTML) {
+            selecaoStatus = false;
             card.setAttribute('onclick','clickCard(this)');
-            chosenCard.setAttribute('onclick','clickCard(this)');
-            setTimeout(spinCard, 1000, chosenCard);
+            cartaoEscolhido.setAttribute('onclick','clickCard(this)');
+            setTimeout(spinCard, 1000, cartaoEscolhido);
             setTimeout(spinCard, 1000, card);
-            chosenCard = null;
+            cartaoEscolhido = null;
         } else {
-            selectedStatus = false;
-            equalCard.push(card.classList[1]);
-        } if (equalCard.length === amountPairs) {
+            selecaoStatus = false;
+            cartaoIgual.push(card.classList[1]);
+        } if (cartaoIgual.length === quantidadePares) {
             clearTimeout(time);
-            setTimeout(endGame, 1000);
+            setTimeout(finalGame, 1000);
         };
     };
 };
@@ -104,11 +104,11 @@ function timeCounter() {
     clock.innerHTML = parseInt(clock.innerHTML) + 1;
 };
 
-function endGame() {
+function finalGame() {
 
     const clock = document.querySelector('.clock');
 
-    alert(`Você ganhou em ${counter} jogadas! A duração do jogo foi de ${clock.innerHTML} segundos!`);
+    alert(`Você ganhou em ${contar} jogadas! A duração do jogo foi de ${clock.innerHTML} segundos!`);
 
     let restart = prompt('Você gostaria de reiniciar a partida? (sim ou não)');
 
@@ -119,7 +119,7 @@ Digite [sim] ou [não]!`);
     if (restart === 'sim') {
         location.reload(true);
     } else {
-        alert(`Obrigada por jogar Parrot Card Game!
+        alert(`Obrigado por jogar Parrot Card Game!
 Até Logo!`)
     };
 
